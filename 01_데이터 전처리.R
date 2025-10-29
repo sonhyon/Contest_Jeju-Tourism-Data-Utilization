@@ -98,7 +98,7 @@ busstop_jeju <- busstop %>%
   filter(도시명 == '제주특별자치도') %>%
   select(정류장명, 위도, 경도, 도시명)
 head(busstop_jeju)
-  
+
 # 역지오코딩
 #busstop_jeju_address <- busstop_jeju %>%
   reverse_geocode(lat = 위도, long = 경도, method = 'osm')
@@ -110,6 +110,17 @@ busstop_jeju_address <- busstop_jeju_address %>%
   select(-address)
 head(busstop_jeju_address)
 
+save(busstop_jeju_address, file = "./busstop_jeju_address.rdata")
+load("./busstop_jeju_address.rdata")
+
+busstop_sum <- busstop_jeju_address %>%
+  group_by(행정구역) %>%
+  summarise(n = n())
+head(busstop_sum)
+
+str(busstop_sum)
+
+save(busstop_sum, file = "./busstop_sum.rdata")
 #───────────────────────────────────────────────────────────────────────────────
 emission <- read.csv("./데이터/제주특별자치도_유동인구에 따른 음식물 쓰레기 배출량 예측으로 제주도 내 클린하우스 관리 시스템 최적화_매쉬업결과.csv", fileEncoding = "CP949")
 head(emission)
